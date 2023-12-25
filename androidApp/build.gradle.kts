@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.application")
     id("org.jetbrains.compose")
+    id("com.google.gms.google-services")
 }
 
 kotlin {
@@ -9,10 +10,15 @@ kotlin {
     sourceSets {
         val androidMain by getting {
             dependencies {
+                implementation(project.dependencies.platform("com.google.firebase:firebase-bom:32.7.0"))
                 implementation(project(":shared"))
             }
         }
     }
+}
+
+dependencies {
+    implementation("com.google.firebase:firebase-common-ktx:20.4.2")
 }
 
 android {
@@ -22,7 +28,7 @@ android {
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
     defaultConfig {
-        applicationId = "com.myapplication.MyApplication"
+        applicationId = "com.vero.easytask"
         minSdk = (findProperty("android.minSdk") as String).toInt()
         targetSdk = (findProperty("android.targetSdk") as String).toInt()
         versionCode = 1

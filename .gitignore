@@ -7,6 +7,8 @@ build/
 /captures
 .externalNativeBuild
 .cxx
+androidApp/google-services.json
+iosApp/iosApp/GoogleService-Info.plist
 iosApp/iosApp.xcworkspace/*
 iosApp/iosApp.xcodeproj/*
 !iosApp/iosApp.xcodeproj/project.pbxproj
