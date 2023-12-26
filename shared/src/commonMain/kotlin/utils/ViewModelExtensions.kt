@@ -1,4 +1,4 @@
-package presentation
+package utils
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import org.koin.core.definition.Definition
