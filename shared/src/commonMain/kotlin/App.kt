@@ -15,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import data.Task
 import di.appModule
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinApplication
@@ -27,6 +29,7 @@ fun App() {
     KoinApplication(application = {
         modules(appModule())
     }) {
+        Napier.base(DebugAntilog())
         MaterialTheme {
             var greetingText by remember { mutableStateOf("Hello, World!") }
             var showImage by remember { mutableStateOf(false) }

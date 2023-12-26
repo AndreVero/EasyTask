@@ -4,6 +4,7 @@ import data.Task
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import io.github.aakira.napier.Napier
 
 class AppViewModel : ViewModel() {
 

@@ -35,6 +35,7 @@ kotlin {
                 implementation("dev.icerock.moko:mvvm-compose:0.16.1")
                 implementation("io.insert-koin:koin-core:3.5.3")
                 implementation("io.insert-koin:koin-compose:1.1.2")
+                implementation("io.github.aakira:napier:2.6.1")
             }
         }
         val androidMain by getting {
