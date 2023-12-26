@@ -1,14 +1,13 @@
-package presentation
+package main.data.repository
 
-import data.Task
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import io.github.aakira.napier.Napier
+import main.domain.model.Task
+import main.domain.repository.TaskRepository
 
-class AppViewModel : ViewModel() {
+class TaskRepositoryImpl : TaskRepository {
 
-    suspend fun getTasks(): List<Task> {
+    override suspend fun getTasks(): List<Task> {
         val firebaseFirestore = Firebase.firestore
         try {
             val userResponse =
@@ -20,4 +19,5 @@ class AppViewModel : ViewModel() {
             throw e
         }
     }
+
 }
