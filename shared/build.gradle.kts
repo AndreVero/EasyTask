@@ -16,6 +16,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "shared"
             isStatic = true
+            binaryOption("bundleId", "com.vero.easytask")
         }
     }
 
@@ -33,7 +34,7 @@ kotlin {
                 implementation("dev.icerock.moko:mvvm-core:0.16.1")
                 implementation("dev.icerock.moko:mvvm-compose:0.16.1")
                 implementation("io.insert-koin:koin-core:3.5.3")
-                implementation("io.insert-koin:koin-compose:1.0.4")
+                implementation("io.insert-koin:koin-compose:1.1.2")
             }
         }
         val androidMain by getting {
