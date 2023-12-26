@@ -6,13 +6,14 @@ import androidx.compose.runtime.setValue
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.launch
 import home.domain.repository.TaskRepository
+import io.github.aakira.napier.Napier
 
 class HomeViewModel(
     private val taskRepository: TaskRepository
 ) : ViewModel() {
 
     var state by mutableStateOf(MainState())
-    private set
+        private set
 
     init {
         getTasks()
@@ -21,7 +22,14 @@ class HomeViewModel(
     private fun getTasks() {
         state = state.copy(isLoading = true)
         viewModelScope.launch {
-            state = state.copy(isLoading = false, tasks = taskRepository.getTasks())
+            taskRepository.getTasks()
+                .onSuccess { tasks ->
+                    Napier.d { "Task success"}
+                    state = state.copy(isLoading = false, tasks = tasks)
+                }
+                .onFailure {
+
+                }
         }
     }
 

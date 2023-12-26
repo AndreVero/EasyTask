@@ -4,6 +4,6 @@ import home.domain.model.Task
 
 interface TaskRepository {
 
-    suspend fun getTasks() : List<Task>
+    suspend fun getTasks() : Result<List<Task>>
 
 }
