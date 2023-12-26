@@ -27,9 +27,11 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation("dev.gitlive:firebase-firestore:1.10.4") // This line
-                implementation("dev.gitlive:firebase-common:1.10.4")// This line
+                implementation("dev.gitlive:firebase-firestore:1.10.4")
+                implementation("dev.gitlive:firebase-common:1.10.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+                implementation("dev.icerock.moko:mvvm-core:0.16.1")
+                implementation("dev.icerock.moko:mvvm-compose:0.16.1")
             }
         }
         val androidMain by getting {
