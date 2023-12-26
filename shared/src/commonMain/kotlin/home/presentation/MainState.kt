@@ -1,6 +1,6 @@
-package main.presentation
+package home.presentation
 
-import main.domain.model.Task
+import home.domain.model.Task
 
 data class MainState(
     val isLoading: Boolean = false,

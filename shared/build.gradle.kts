@@ -36,6 +36,8 @@ kotlin {
                 implementation("io.insert-koin:koin-core:3.5.3")
                 implementation("io.insert-koin:koin-compose:1.1.2")
                 implementation("io.github.aakira:napier:2.6.1")
+                implementation("cafe.adriel.voyager:voyager-navigator:1.0.0")
+                implementation("cafe.adriel.voyager:voyager-transitions:1.0.0")
             }
         }
         val androidMain by getting {

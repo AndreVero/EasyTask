@@ -1,16 +1,13 @@
-package main.presentation
+package home.presentation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import main.domain.model.Task
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.firestore.firestore
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.launch
-import main.domain.repository.TaskRepository
+import home.domain.repository.TaskRepository
 
-class AppViewModel(
+class HomeViewModel(
     private val taskRepository: TaskRepository
 ) : ViewModel() {
 

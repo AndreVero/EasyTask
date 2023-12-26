@@ -10,12 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import main.di.appModule
+import cafe.adriel.voyager.navigator.Navigator
+import home.di.appModule
+import home.presentation.HomeScreen
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
-import main.presentation.AppViewModel
+import home.presentation.HomeViewModel
 
 @Composable
 fun App() {
@@ -24,23 +26,7 @@ fun App() {
     }) {
         Napier.base(DebugAntilog())
         MaterialTheme {
-            val viewModel = koinInject<AppViewModel>()
-
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                AnimatedContent(viewModel.state.isLoading) {isLoading ->
-                    if (!isLoading) {
-                        viewModel.state.tasks.forEach {
-                            Text(text = "${it.title} : ${it.description}")
-                        }
-                    } else {
-                        CircularProgressIndicator(modifier = Modifier.size(50.dp))
-                    }
-                }
-            }
+            Navigator(HomeScreen)
         }
     }
 }

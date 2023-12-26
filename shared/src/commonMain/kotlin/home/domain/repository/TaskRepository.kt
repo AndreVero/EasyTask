@@ -1,6 +1,6 @@
-package main.domain.repository
+package home.domain.repository
 
-import main.domain.model.Task
+import home.domain.model.Task
 
 interface TaskRepository {
 

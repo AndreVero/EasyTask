@@ -1,9 +1,9 @@
-package main.data.repository
+package home.data.repository
 
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
-import main.domain.model.Task
-import main.domain.repository.TaskRepository
+import home.domain.model.Task
+import home.domain.repository.TaskRepository
 
 class TaskRepositoryImpl : TaskRepository {
 
