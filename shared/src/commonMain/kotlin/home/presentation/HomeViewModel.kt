@@ -7,6 +7,8 @@ import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.launch
 import home.domain.repository.TaskRepository
 import io.github.aakira.napier.Napier
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 
 class HomeViewModel(
     private val taskRepository: TaskRepository
@@ -15,9 +17,10 @@ class HomeViewModel(
     var state by mutableStateOf(MainState())
         private set
 
-    init {
-        getTasks()
-    }
+    private val _uiEvent = Channel<HomeUiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
+
+    init { getTasks() }
 
     private fun getTasks() {
         state = state.copy(isLoading = true)
@@ -28,7 +31,7 @@ class HomeViewModel(
                     state = state.copy(isLoading = false, tasks = tasks)
                 }
                 .onFailure {
-
+                    _uiEvent.send(HomeUiEvent.ShowError("Error in Task loading"))
                 }
         }
     }
