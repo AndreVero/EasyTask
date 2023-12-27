@@ -3,9 +3,12 @@ package home.presentation
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,6 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import home.domain.model.Task
+import home.presentation.components.tasks.ScaleStyle
+import home.presentation.components.tasks.TasksComponent
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 import utils.LocalSnackbarHostState
@@ -32,21 +38,32 @@ object HomeScreen : Screen {
             }
         }
 
-        Column(
+        Column (
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            AnimatedContent(viewModel.state.isLoading) {isLoading ->
-                if (!isLoading) {
+            TasksComponent(
+                modifier = Modifier.size(200.dp),
+                tasks = listOf(
+                    Task(title = "TEST", ""),
+                    Task(title = "TEST", ""),
+                    Task(title = "TEST", "")
+                ),
+                style = ScaleStyle()
+            )
 
-                    viewModel.state.tasks.forEach {
-                        Text(text = "${it.title} : ${it.description}")
-                    }
-                } else {
-                    CircularProgressIndicator(modifier = Modifier.size(50.dp))
-                }
-            }
+
+//            AnimatedContent(viewModel.state.isLoading) {isLoading ->
+//                if (!isLoading) {
+//                    viewModel.state.tasks.forEach {
+//                        Text(text = "${it.title} : ${it.description}")
+//                    }
+//
+//                } else {
+//                    CircularProgressIndicator(modifier = Modifier.size(50.dp))
+//                }
+//            }
         }
     }
 }
