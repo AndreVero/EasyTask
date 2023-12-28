@@ -1,23 +1,18 @@
 package home.presentation
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import home.domain.model.Task
-import home.presentation.components.tasks.ScaleStyle
 import home.presentation.components.tasks.TasksComponent
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
@@ -44,13 +39,12 @@ object HomeScreen : Screen {
             verticalArrangement = Arrangement.Center
         ) {
             TasksComponent(
-                modifier = Modifier.size(200.dp),
+                modifier = Modifier.size(420.dp).background(Color.Gray),
                 tasks = listOf(
                     Task(title = "TEST", ""),
                     Task(title = "TEST", ""),
                     Task(title = "TEST", "")
-                ),
-                style = ScaleStyle()
+                )
             )
 
 
