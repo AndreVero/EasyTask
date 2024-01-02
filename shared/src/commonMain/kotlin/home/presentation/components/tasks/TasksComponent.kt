@@ -37,20 +37,21 @@ import kotlin.math.sin
 fun TasksComponent(
     modifier: Modifier = Modifier,
     tasks: List<Task> = emptyList(),
-    mainCircleRadius: Dp = 150.dp,
-    innerCircleRadius: Dp = 60.dp
+    mainCircleRadius: Dp = 130.dp,
+    innerCircleRadius: Dp = 60.dp,
+    onTaskClick: (Task) -> Unit,
 ) {
 
     val textMeasurer = rememberTextMeasurer()
     val path = remember {
-        PathParser().parsePathString("M22.05,7.08A7.08,7.08 0,1 0,15 14.16,7.08 7.08,0 0,0 22.05,7.08ZM0,25.2V43.25a2.8,2.8 0,0 0,5.6 0V25.67H6.71l0.06,21.16v29a3.73,3.73 0,0 0,3.73 3.74h0.08a3.73,3.73 0,0 0,3.73 -3.74v-29h1.33V75.69a3.73,3.73 0,0 0,3.73 3.73h0.08a3.73,3.73 0,0 0,3.73 -3.73v-50h1.17V43.25a2.8,2.8 0,0 0,5.6 0v-18c0,-2.95 -0.78,-9.64 -6.77,-9.64H6.69C0.77,15.62 0,22.26 0,25.2Z")
+        PathParser().parsePathString("m11,2.5c0-1.381,1.119-2.5,2.5-2.5s2.5,1.119,2.5,2.5-1.119,2.5-2.5,2.5-2.5-1.119-2.5-2.5Zm9.171,9.658l-2.625-1.312s-2.268-3.592-2.319-3.651c-.665-.76-1.625-1.195-2.634-1.195-1.274,0-2.549.301-3.688.871l-2.526,1.263c-.641.321-1.114.902-1.298,1.596l-.633,2.387c-.212.801.265,1.622,1.065,1.834.802.213,1.622-.264,1.834-1.065l.575-2.168,1.831-.916-.662,2.83c-.351,1.5.339,3.079,1.679,3.84l3.976,2.258c.156.089.253.256.253.436v3.336c0,.829.672,1.5,1.5,1.5s1.5-.671,1.5-1.5v-3.336c0-1.256-.679-2.422-1.771-3.043l-2.724-1.547.849-3.165.875,1.39c.146.232.354.42.599.543l3,1.5c.216.107.444.159.67.159.55,0,1.08-.304,1.343-.83.37-.741.07-1.642-.671-2.013Zm-10.312,5.465c-.812-.161-1.6.378-1.754,1.192l-.039.2-1.407,2.814c-.37.741-.07,1.642.671,2.013.215.107.444.159.67.159.55,0,1.08-.304,1.343-.83l1.5-3c.062-.123.106-.254.131-.39l.077-.404c.156-.813-.378-1.599-1.192-1.754Z")
             .toPath()
     }
     val pathBounds = remember {
         path.getBounds()
     }
 
-    val rects by remember { mutableStateOf<MutableList<Offset>>(mutableListOf()) }
+    val taskUiItems by remember { mutableStateOf<MutableMap<Offset, Task>>(mutableMapOf()) }
     val animateFloat = remember { Animatable(0f) }
     val animateFloatScale = remember { Animatable(1f) }
     val animateFloatText = remember { Animatable(10f) }
@@ -72,7 +73,7 @@ fun TasksComponent(
     }
     LaunchedEffect(animateFloat) {
         animateFloatScale.animateTo(
-            targetValue = 2f,
+            targetValue = 3f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioMediumBouncy,
                 stiffness = Spring.StiffnessVeryLow
@@ -92,10 +93,10 @@ fun TasksComponent(
     Canvas(modifier = modifier
         .pointerInput(true) {
             detectTapGestures { clickOffset ->
-                rects.forEach { taskOffset ->
-                    val rect = Rect(taskOffset, innerCircleRadius.toPx())
+                taskUiItems.forEach { item ->
+                    val rect = Rect(item.key, innerCircleRadius.toPx())
                     if (rect.contains(clickOffset)) {
-                        Napier.d { "Click detected" }
+                        onTaskClick(item.value)
                     }
                 }
             }
@@ -119,7 +120,7 @@ fun TasksComponent(
                 ) * (180f / PI.toFloat())
                 touchAngel = (touchAngel + 180f).mod(360f)
 
-                val changeAngle = touchAngel - oldAngel
+                val changeAngle = touchAngel - dragStartedAngel
 
                 angel = (oldAngel + (changeAngle).roundToInt())
             }
@@ -128,7 +129,7 @@ fun TasksComponent(
 
         val distance = 360f / tasks.size
 
-        rects.clear()
+        taskUiItems.clear()
         tasks.forEachIndexed { i, task ->
             val angelInRad = (i * distance + angel - 90) * (PI / 180).toFloat()
             val currentOffset = Offset(
@@ -136,20 +137,20 @@ fun TasksComponent(
                 y = mainCircleRadius.toPx() * sin(angelInRad) + circleCenter.y
             )
 
-            rects.add(currentOffset)
+            taskUiItems.put(currentOffset, task)
             drawCircle(
-                color = Color.Red,
+                color = Color.White,
                 radius = innerCircleRadius.toPx() * animateFloat.value,
                 center = currentOffset
             )
             translate(
                 left = currentOffset.x - pathBounds.right * 2 / 2,
-                top = currentOffset.y - 20.dp.toPx() - pathBounds.bottom  * 2 / 2
+                top = currentOffset.y - 15.dp.toPx() - pathBounds.bottom  * 2 / 2
             ) {
                 scale(scale = animateFloatScale.value, pathBounds.topLeft) {
                     drawPath(
                         path = path,
-                        color = Color.Green
+                        color = Color.Black
                     )
                 }
             }
