@@ -4,6 +4,10 @@ import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import cafe.adriel.voyager.navigator.Navigator
 import home.di.appModule
 import home.presentation.HomeScreen
@@ -18,7 +22,7 @@ fun App() {
         modules(appModule())
     }) {
         Napier.base(DebugAntilog())
-        MaterialTheme {
+        EasyTaskTheme {
             val localSnackbarHostState = LocalSnackbarHostState.current
             CompositionLocalProvider(
                 LocalSnackbarHostState provides localSnackbarHostState
@@ -42,4 +46,8 @@ fun App() {
 }
 
 
+
 expect fun getPlatformName(): String
+
+@Composable
+expect fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font
