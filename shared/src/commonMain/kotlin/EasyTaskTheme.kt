@@ -16,6 +16,9 @@ fun EasyTaskTheme(
     val metalsmithRegular = FontFamily(
         font("MetalSmith", "metalsmith_regular", FontWeight.Normal, FontStyle.Normal)
     )
+    val ibmPlexMono = FontFamily(
+        font("StoryStyle", "ibmplexmono_regular", FontWeight.Normal, FontStyle.Normal)
+    )
 
     MaterialTheme(
         colors = MaterialTheme.colors.copy(
@@ -27,7 +30,22 @@ fun EasyTaskTheme(
                 fontFamily = metalsmithRegular,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp
-            )
+            ),
+            h4 = TextStyle(
+                fontFamily = metalsmithRegular,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            ),
+            body1 = TextStyle(
+                fontFamily = ibmPlexMono,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp
+            ),
+            body2 = TextStyle(
+                fontFamily = ibmPlexMono,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp
+            ),
         )
     ) {
         content()

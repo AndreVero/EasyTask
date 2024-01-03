@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,15 +19,15 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import home.domain.model.Task
-import io.github.aakira.napier.Napier
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -39,22 +40,16 @@ fun TasksComponent(
     tasks: List<Task> = emptyList(),
     mainCircleRadius: Dp = 130.dp,
     innerCircleRadius: Dp = 60.dp,
+    textStyle: TextStyle = MaterialTheme.typography.body2,
     onTaskClick: (Task) -> Unit,
 ) {
 
     val textMeasurer = rememberTextMeasurer()
-    val path = remember {
-        PathParser().parsePathString("m11,2.5c0-1.381,1.119-2.5,2.5-2.5s2.5,1.119,2.5,2.5-1.119,2.5-2.5,2.5-2.5-1.119-2.5-2.5Zm9.171,9.658l-2.625-1.312s-2.268-3.592-2.319-3.651c-.665-.76-1.625-1.195-2.634-1.195-1.274,0-2.549.301-3.688.871l-2.526,1.263c-.641.321-1.114.902-1.298,1.596l-.633,2.387c-.212.801.265,1.622,1.065,1.834.802.213,1.622-.264,1.834-1.065l.575-2.168,1.831-.916-.662,2.83c-.351,1.5.339,3.079,1.679,3.84l3.976,2.258c.156.089.253.256.253.436v3.336c0,.829.672,1.5,1.5,1.5s1.5-.671,1.5-1.5v-3.336c0-1.256-.679-2.422-1.771-3.043l-2.724-1.547.849-3.165.875,1.39c.146.232.354.42.599.543l3,1.5c.216.107.444.159.67.159.55,0,1.08-.304,1.343-.83.37-.741.07-1.642-.671-2.013Zm-10.312,5.465c-.812-.161-1.6.378-1.754,1.192l-.039.2-1.407,2.814c-.37.741-.07,1.642.671,2.013.215.107.444.159.67.159.55,0,1.08-.304,1.343-.83l1.5-3c.062-.123.106-.254.131-.39l.077-.404c.156-.813-.378-1.599-1.192-1.754Z")
-            .toPath()
-    }
-    val pathBounds = remember {
-        path.getBounds()
-    }
 
     val taskUiItems by remember { mutableStateOf<MutableMap<Offset, Task>>(mutableMapOf()) }
     val animateFloat = remember { Animatable(0f) }
     val animateFloatScale = remember { Animatable(1f) }
-    val animateFloatText = remember { Animatable(10f) }
+    val animateFloatText = remember { Animatable(0f) }
 
     var circleCenter by remember { mutableStateOf(Offset.Zero) }
 
@@ -64,7 +59,7 @@ fun TasksComponent(
 
     LaunchedEffect(animateFloat) {
         animateFloatText.animateTo(
-            targetValue = 40f,
+            targetValue = 1f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioMediumBouncy,
                 stiffness = Spring.StiffnessVeryLow
@@ -73,7 +68,7 @@ fun TasksComponent(
     }
     LaunchedEffect(animateFloat) {
         animateFloatScale.animateTo(
-            targetValue = 3f,
+            targetValue = 3.5f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioMediumBouncy,
                 stiffness = Spring.StiffnessVeryLow
@@ -143,22 +138,28 @@ fun TasksComponent(
                 radius = innerCircleRadius.toPx() * animateFloat.value,
                 center = currentOffset
             )
+            val pathBounds = task.taskPath.bounds
             translate(
-                left = currentOffset.x - pathBounds.right * 2 / 2,
-                top = currentOffset.y - 15.dp.toPx() - pathBounds.bottom  * 2 / 2
+                left = currentOffset.x - pathBounds.right * 1.5f,
+                top = currentOffset.y - 15.dp.toPx() - pathBounds.bottom  * 1.5f
             ) {
                 scale(scale = animateFloatScale.value, pathBounds.topLeft) {
                     drawPath(
-                        path = path,
+                        path = task.taskPath.path,
                         color = Color.Black
                     )
                 }
             }
 
+            val fontSize = textStyle.fontSize
             val result = textMeasurer.measure(
                 task.title,
-                style = TextStyle(
-                    fontSize = animateFloatText.value.toSp()
+                constraints = Constraints(
+                    maxWidth = (innerCircleRadius.toPx() * 2 - 40f).toInt()
+                ),
+                style = textStyle.copy(
+                    textAlign = TextAlign.Center,
+                    fontSize = (fontSize.toPx() * animateFloatText.value).toSp()
                 )
             )
 

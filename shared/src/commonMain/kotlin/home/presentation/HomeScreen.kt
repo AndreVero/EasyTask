@@ -3,10 +3,16 @@
 package home.presentation
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +23,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -30,9 +39,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import home.presentation.components.tasks.TasksComponent
@@ -66,19 +79,24 @@ object HomeScreen : Screen {
                 title = {
                     Text(
                         text = "Easy Task",
+                        style = MaterialTheme.typography.h3,
                         color = Color.White
                     )
                 },
                 backgroundColor = Color.Transparent,
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(
+                        modifier = Modifier.clip(CircleShape).background(Color.White),
+                        onClick = {}
+                    ) {
                         Icon(
-                            imageVector = Icons.Default.List,
-                            tint = Color.White,
+                            painter = painterResource("icon_chart.xml"),
+                            tint = Color.Black,
                             contentDescription = "Statistic"
                         )
                     }
-                }
+                },
+                modifier = Modifier.padding(top = 16.dp)
             )
             Spacer(modifier = Modifier.height(100.dp))
             Box(modifier = Modifier.fillMaxSize()) {
@@ -94,10 +112,12 @@ object HomeScreen : Screen {
                                 tasks = viewModel.state.tasks,
                                 onTaskClick = {}
                             )
-                            Image(
-                                painter = painterResource("baseline_task_24.xml"),
-                                contentDescription = "Home icon",
-                                modifier = Modifier.align(Alignment.Center).size(48.dp)
+                            Text(
+                                text = "Choose Your Destiny",
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.h4,
+                                modifier = Modifier.align(Alignment.Center).width(100.dp)
                             )
                         }
                     }
@@ -105,17 +125,21 @@ object HomeScreen : Screen {
 
                 Column(modifier = Modifier.align(Alignment.BottomCenter)) {
                     AnimatedVisibility(
-                        !viewModel.state.isLoading,
-                        enter = fadeIn() + expandVertically(),
-                        exit = fadeOut() + shrinkVertically(),
-                        modifier = Modifier
+                        visible = !viewModel.state.isLoading,
+                        enter = slideIn(
+                            initialOffset = { IntOffset(0, it.height) },
+                            animationSpec = spring(
+                                stiffness = Spring.StiffnessMediumLow,
+                                visibilityThreshold = IntOffset.VisibilityThreshold
+                            )
+                        )
                     ) {
                         Box(modifier = Modifier
                             .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
                             .fillMaxWidth()
-                            .height(180.dp)
+                            .height(120.dp)
                             .background(Color.White)
-                            .clickable {  }
+                            .clickable { }
                         ) {
                             Text(
                                 text = "Tasks for Today",
