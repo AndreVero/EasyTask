@@ -1,23 +1,25 @@
-package home.domain.model
+package home.data.remote.dto
 
 import androidx.compose.ui.graphics.vector.PathParser
+import home.domain.model.Goal
+import home.domain.model.GoalPath
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TaskDto(
+data class GoalDto(
     val title: String,
     val description: String,
     val icon: String,
 )
 
-fun TaskDto.toTaskUiModel() : Task {
+fun GoalDto.toGoal() : Goal {
     val path = PathParser().parsePathString(this.icon)
         .toPath()
 
-    return Task(
+    return Goal(
         title = this.title,
         description = this.description,
-        taskPath = TaskPath(
+        goalPath = GoalPath(
             path = path,
             bounds = path.getBounds()
         )
