@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import home.domain.model.Task
+import home.domain.model.Goal
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -37,16 +37,16 @@ import kotlin.math.sin
 @Composable
 fun TasksComponent(
     modifier: Modifier = Modifier,
-    tasks: List<Task> = emptyList(),
+    goals: List<Goal> = emptyList(),
     mainCircleRadius: Dp = 130.dp,
     innerCircleRadius: Dp = 60.dp,
     textStyle: TextStyle = MaterialTheme.typography.body2,
-    onTaskClick: (Task) -> Unit,
+    onTaskClick: (Goal) -> Unit,
 ) {
 
     val textMeasurer = rememberTextMeasurer()
 
-    val taskUiItems by remember { mutableStateOf<MutableMap<Offset, Task>>(mutableMapOf()) }
+    val goalUiItems by remember { mutableStateOf<MutableMap<Offset, Goal>>(mutableMapOf()) }
     val animateFloat = remember { Animatable(0f) }
     val animateFloatScale = remember { Animatable(1f) }
     val animateFloatText = remember { Animatable(0f) }
@@ -54,8 +54,8 @@ fun TasksComponent(
     var circleCenter by remember { mutableStateOf(Offset.Zero) }
 
     var angel by remember { mutableStateOf(0f) }
-    var dragStartedAngel by remember { mutableStateOf(0f) }
-    var oldAngel by remember { mutableStateOf(angel) }
+    var dragStartedAngle by remember { mutableStateOf(0f) }
+    var oldAngle by remember { mutableStateOf(angel) }
 
     LaunchedEffect(animateFloat) {
         animateFloatText.animateTo(
@@ -88,7 +88,7 @@ fun TasksComponent(
     Canvas(modifier = modifier
         .pointerInput(true) {
             detectTapGestures { clickOffset ->
-                taskUiItems.forEach { item ->
+                goalUiItems.forEach { item ->
                     val rect = Rect(item.key, innerCircleRadius.toPx())
                     if (rect.contains(clickOffset)) {
                         onTaskClick(item.value)
@@ -99,53 +99,53 @@ fun TasksComponent(
         .pointerInput(true) {
             detectDragGestures(
                 onDragStart = { offset ->
-                    dragStartedAngel = -atan2(
+                    dragStartedAngle = -atan2(
                         circleCenter.x - offset.x,
                         circleCenter.y - offset.y,
                     ) * (180f / PI.toFloat())
-                    dragStartedAngel = (dragStartedAngel + 180f).mod(360f)
+                    dragStartedAngle = (dragStartedAngle + 180f).mod(360f)
                 },
                 onDragEnd = {
-                    oldAngel = angel
+                    oldAngle = angel
                 }
             ) { change, _ ->
-                var touchAngel = -atan2(
+                var touchAngle = -atan2(
                     circleCenter.x - change.position.x,
                     circleCenter.y - change.position.y,
                 ) * (180f / PI.toFloat())
-                touchAngel = (touchAngel + 180f).mod(360f)
+                touchAngle = (touchAngle + 180f).mod(360f)
 
-                val changeAngle = touchAngel - dragStartedAngel
+                val changeAngle = touchAngle - dragStartedAngle
 
-                angel = (oldAngel + (changeAngle).roundToInt())
+                angel = (oldAngle + (changeAngle).roundToInt())
             }
         }) {
         circleCenter = Offset(center.x, center.y)
 
-        val distance = 360f / tasks.size
+        val distance = 360f / goals.size
 
-        taskUiItems.clear()
-        tasks.forEachIndexed { i, task ->
+        goalUiItems.clear()
+        goals.forEachIndexed { i, task ->
             val angelInRad = (i * distance + angel - 90) * (PI / 180).toFloat()
             val currentOffset = Offset(
                 x = mainCircleRadius.toPx() * cos(angelInRad) + circleCenter.x,
                 y = mainCircleRadius.toPx() * sin(angelInRad) + circleCenter.y
             )
 
-            taskUiItems.put(currentOffset, task)
+            goalUiItems.put(currentOffset, task)
             drawCircle(
                 color = Color.White,
                 radius = innerCircleRadius.toPx() * animateFloat.value,
                 center = currentOffset
             )
-            val pathBounds = task.taskPath.bounds
+            val pathBounds = task.goalPath.bounds
             translate(
                 left = currentOffset.x - pathBounds.right * 1.5f,
                 top = currentOffset.y - 15.dp.toPx() - pathBounds.bottom  * 1.5f
             ) {
                 scale(scale = animateFloatScale.value, pathBounds.topLeft) {
                     drawPath(
-                        path = task.taskPath.path,
+                        path = task.goalPath.path,
                         color = Color.Black
                     )
                 }

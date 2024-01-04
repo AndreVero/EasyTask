@@ -9,8 +9,10 @@ object SafeApiHandler {
             val result = func()
             Result.success(result)
         } catch (e: CancellationException) {
+            e.printStackTrace()
             throw e
         } catch (e: Exception) {
+            e.printStackTrace()
             Result.failure(e)
         }
     }

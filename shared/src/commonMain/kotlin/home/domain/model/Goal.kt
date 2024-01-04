@@ -1,7 +1,7 @@
 package home.domain.model
 
-data class Task(
+data class Goal(
     val title: String,
     val description: String,
-    val taskPath: TaskPath
+    val goalPath: GoalPath
 )

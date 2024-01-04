@@ -4,22 +4,23 @@ import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import cafe.adriel.voyager.navigator.Navigator
-import home.di.appModule
+import cafe.adriel.voyager.transitions.SlideTransition
+import home.di.goalModule
 import home.presentation.HomeScreen
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import org.koin.compose.KoinApplication
+import tasks.di.tasksModule
 import utils.LocalSnackbarHostState
 
 @Composable
 fun App() {
     KoinApplication(application = {
-        modules(appModule())
+        modules(goalModule() + tasksModule())
     }) {
         Napier.base(DebugAntilog())
         EasyTaskTheme {
@@ -38,7 +39,7 @@ fun App() {
                         }
                     }
                 ) {
-                    Navigator(HomeScreen)
+                    Navigator(HomeScreen) { SlideTransition(it) }
                 }
             }
         }

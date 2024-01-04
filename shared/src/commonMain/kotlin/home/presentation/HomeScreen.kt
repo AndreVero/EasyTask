@@ -6,14 +6,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,26 +28,24 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import home.presentation.components.tasks.TasksComponent
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
+import tasks.presentation.TasksScreen
 import utils.LocalSnackbarHostState
 
 object HomeScreen : Screen {
@@ -61,6 +54,7 @@ object HomeScreen : Screen {
     override fun Content() {
         val viewModel = koinInject<HomeViewModel>()
         val localSnackbarHost = LocalSnackbarHostState.current
+        val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(true) {
             viewModel.uiEvent.collectLatest { event ->
@@ -109,7 +103,7 @@ object HomeScreen : Screen {
                         Box {
                             TasksComponent(
                                 modifier = Modifier.size(420.dp).align(Alignment.Center),
-                                tasks = viewModel.state.tasks,
+                                goals = viewModel.state.goals,
                                 onTaskClick = {}
                             )
                             Text(
@@ -139,7 +133,7 @@ object HomeScreen : Screen {
                             .fillMaxWidth()
                             .height(120.dp)
                             .background(Color.White)
-                            .clickable { }
+                            .clickable { navigator.push(TasksScreen) }
                         ) {
                             Text(
                                 text = "Tasks for Today",
