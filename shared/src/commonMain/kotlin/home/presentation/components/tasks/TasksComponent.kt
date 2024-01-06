@@ -35,13 +35,13 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 
 @Composable
-fun TasksComponent(
+fun GoalsComponent(
     modifier: Modifier = Modifier,
     goals: List<Goal> = emptyList(),
     mainCircleRadius: Dp = 130.dp,
     innerCircleRadius: Dp = 60.dp,
     textStyle: TextStyle = MaterialTheme.typography.body2,
-    onTaskClick: (Goal) -> Unit,
+    onGoalClick: (Goal) -> Unit,
 ) {
 
     val textMeasurer = rememberTextMeasurer()
@@ -91,7 +91,7 @@ fun TasksComponent(
                 goalUiItems.forEach { item ->
                     val rect = Rect(item.key, innerCircleRadius.toPx())
                     if (rect.contains(clickOffset)) {
-                        onTaskClick(item.value)
+                        onGoalClick(item.value)
                     }
                 }
             }

@@ -40,7 +40,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import home.presentation.components.tasks.TasksComponent
+import goaldetails.presentation.GoalDetailsScreen
+import home.presentation.components.tasks.GoalsComponent
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -101,10 +102,12 @@ object HomeScreen : Screen {
                         exit = fadeOut(),
                     ) {
                         Box {
-                            TasksComponent(
+                            GoalsComponent(
                                 modifier = Modifier.size(420.dp).align(Alignment.Center),
                                 goals = viewModel.state.goals,
-                                onTaskClick = {}
+                                onGoalClick = {
+                                    navigator.push(GoalDetailsScreen(it.title))
+                                }
                             )
                             Text(
                                 text = "Choose Your Destiny",

@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import goaldetails.di.goalDetails
 import home.di.goalModule
 import home.presentation.HomeScreen
 import io.github.aakira.napier.DebugAntilog
@@ -20,7 +21,7 @@ import utils.LocalSnackbarHostState
 @Composable
 fun App() {
     KoinApplication(application = {
-        modules(goalModule() + tasksModule())
+        modules(goalModule() + tasksModule() + goalDetails())
     }) {
         Napier.base(DebugAntilog())
         EasyTaskTheme {
