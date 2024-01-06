@@ -1,4 +1,4 @@
-package home.presentation.components.tasks
+package home.presentation.components.goals
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -132,7 +132,7 @@ fun GoalsComponent(
                 y = mainCircleRadius.toPx() * sin(angelInRad) + circleCenter.y
             )
 
-            goalUiItems.put(currentOffset, task)
+            goalUiItems[currentOffset] = task
             drawCircle(
                 color = Color.White,
                 radius = innerCircleRadius.toPx() * animateFloat.value,

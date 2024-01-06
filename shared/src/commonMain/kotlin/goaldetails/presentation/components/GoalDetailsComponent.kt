@@ -51,19 +51,13 @@ fun GoalDetailsComponent(
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Title: " + goalDetails.title,
+            text = goalDetails.title,
             color = Color.White,
             style = MaterialTheme.typography.body2,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Description: " + goalDetails.description,
-            color = Color.White,
-            style = MaterialTheme.typography.body2,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Motivation: " + goalDetails.motivation,
+            text = goalDetails.description,
             color = Color.White,
             style = MaterialTheme.typography.body2,
         )

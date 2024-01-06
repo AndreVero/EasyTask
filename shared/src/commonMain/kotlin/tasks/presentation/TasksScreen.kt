@@ -79,7 +79,7 @@ object TasksScreen : Screen {
                 modifier = Modifier.padding(top = 16.dp)
             )
             Spacer(modifier = Modifier.height(32.dp))
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
                 if (state.tasks.isNotEmpty())
                     items(
                         viewModel.state.tasks,
