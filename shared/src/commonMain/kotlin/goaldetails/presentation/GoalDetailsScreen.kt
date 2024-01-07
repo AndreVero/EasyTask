@@ -1,4 +1,4 @@
-package tasks.presentation
+package goaldetails.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -31,17 +31,17 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import goaldetails.presentation.components.GoalDetailsComponent
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
-import tasks.presentation.components.TaskComponent
 import utils.LocalSnackbarHostState
 
-object TasksScreen : Screen {
+data class GoalDetailsScreen(val goalId: String) : Screen {
     @Composable
     override fun Content() {
         val localSnackbarHost = LocalSnackbarHostState.current
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinInject<TasksViewModel>()
+        val viewModel = koinInject<GoalDetailsViewModel>()
         val state = viewModel.state
         var appBarIsVisible by remember { mutableStateOf(false) }
 
@@ -49,7 +49,7 @@ object TasksScreen : Screen {
             appBarIsVisible = true
             viewModel.uiEvent.collectLatest { event ->
                 when (event) {
-                    is TasksUiEvent.ShowError -> localSnackbarHost.showSnackbar(event.message)
+                    is GoalDetailsUiEvent.ShowError -> localSnackbarHost.showSnackbar(event.message)
                 }
             }
         }
@@ -58,7 +58,7 @@ object TasksScreen : Screen {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Tasks For Today",
+                        text = "Details",
                         style = MaterialTheme.typography.h3,
                         color = Color.White
                     )
@@ -79,13 +79,13 @@ object TasksScreen : Screen {
                 modifier = Modifier.padding(top = 16.dp)
             )
             Spacer(modifier = Modifier.height(32.dp))
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-                if (state.tasks.isNotEmpty())
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                if (state.goalDetails.isNotEmpty())
                     items(
-                        viewModel.state.tasks,
+                        viewModel.state.goalDetails,
                         key = { item -> item.title }
                     ) {
-                        TaskComponent(task = it)
+                        GoalDetailsComponent(goalDetails = it)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 else {
