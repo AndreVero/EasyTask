@@ -3,21 +3,23 @@ package goaldetails.data.remote.dto
 import androidx.compose.ui.graphics.vector.PathParser
 import goaldetails.domain.model.GoalDetails
 import kotlinx.serialization.Serializable
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 @Serializable
 data class GoalDetailsDto(
     val title: String,
     val description: String,
     val icon: String,
-    val motivation: String
+    val tasks: List<String>
 )
 
 fun GoalDetailsDto.toGoalDetails() : GoalDetails {
     return GoalDetails(
-        title = this.title,
+        title = this.title + Random.nextInt(0..100),
         description = this.description,
         icon = PathParser().parsePathString(this.icon)
             .toPath(),
-        motivation = this.motivation
+        tasks = this.tasks
     )
 }

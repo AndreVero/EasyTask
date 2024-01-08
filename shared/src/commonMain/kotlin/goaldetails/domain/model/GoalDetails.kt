@@ -6,5 +6,6 @@ data class GoalDetails(
     val title: String,
     val description: String,
     val icon: Path,
-    val motivation: String
+    val tasks: List<String>
+
 )

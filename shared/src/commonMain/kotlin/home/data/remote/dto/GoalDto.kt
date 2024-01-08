@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GoalDto(
+    val id: String,
     val title: String,
     val description: String,
     val icon: String,
@@ -17,6 +18,7 @@ fun GoalDto.toGoal() : Goal {
         .toPath()
 
     return Goal(
+        id = this.id,
         title = this.title,
         description = this.description,
         goalPath = GoalPath(

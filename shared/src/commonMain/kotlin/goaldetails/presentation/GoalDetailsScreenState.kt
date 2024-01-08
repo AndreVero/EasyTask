@@ -4,5 +4,5 @@ import goaldetails.domain.model.GoalDetails
 
 data class GoalDetailsScreenState(
     val isLoading: Boolean = false,
-    val goalDetails: List<GoalDetails> = emptyList()
+    val goalDetails: GoalDetails? = null
 )

@@ -47,6 +47,7 @@ data class GoalDetailsScreen(val goalId: String) : Screen {
 
         LaunchedEffect(true) {
             appBarIsVisible = true
+            viewModel.getTasks(goalId)
             viewModel.uiEvent.collectLatest { event ->
                 when (event) {
                     is GoalDetailsUiEvent.ShowError -> localSnackbarHost.showSnackbar(event.message)
@@ -80,12 +81,15 @@ data class GoalDetailsScreen(val goalId: String) : Screen {
             )
             Spacer(modifier = Modifier.height(32.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                if (state.goalDetails.isNotEmpty())
+                if (state.goalDetails != null)
                     items(
-                        viewModel.state.goalDetails,
-                        key = { item -> item.title }
+                        viewModel.state.goalDetails!!.tasks,
+                        key = { item -> item }
                     ) {
-                        GoalDetailsComponent(goalDetails = it)
+                        GoalDetailsComponent(
+                            task = it,
+                            goalDetails = state.goalDetails
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 else {

@@ -11,12 +11,11 @@ import utils.SafeApiHandler
 
 class GoalDetailsRepositoryImpl : GoalDetailsRepository {
 
-    override suspend fun getGoalDetails(): Result<List<GoalDetails>> {
+    override suspend fun getGoalDetails(id: String): Result<GoalDetails> {
         val firebaseFirestore = Firebase.firestore
         return SafeApiHandler.safeApiCall {
-            val userResponse = firebaseFirestore.collection("TodayTasks").get()
-            val tasks = userResponse.documents.map<DocumentSnapshot, GoalDetailsDto> { it.data() }
-            tasks.map { it.toGoalDetails() }
+            val userResponse = firebaseFirestore.collection("Goals").document(id).get()
+            userResponse.data<GoalDetailsDto>().toGoalDetails()
         }
     }
 

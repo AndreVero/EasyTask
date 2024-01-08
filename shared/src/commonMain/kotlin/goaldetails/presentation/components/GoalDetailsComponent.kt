@@ -26,6 +26,7 @@ import goaldetails.domain.model.GoalDetails
 
 @Composable
 fun GoalDetailsComponent(
+    task: String,
     goalDetails: GoalDetails,
     modifier: Modifier = Modifier
 ) {
