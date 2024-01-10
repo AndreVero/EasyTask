@@ -1,10 +1,11 @@
 package goaldetails.presentation
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -35,6 +35,8 @@ import goaldetails.presentation.components.GoalDetailsComponent
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 import utils.LocalSnackbarHostState
+
+val DEFAULT_HEIGHT = 120.dp
 
 data class GoalDetailsScreen(val goalId: String) : Screen {
     @Composable
@@ -47,6 +49,7 @@ data class GoalDetailsScreen(val goalId: String) : Screen {
 
         LaunchedEffect(true) {
             appBarIsVisible = true
+            viewModel.getTasks(goalId)
             viewModel.uiEvent.collectLatest { event ->
                 when (event) {
                     is GoalDetailsUiEvent.ShowError -> localSnackbarHost.showSnackbar(event.message)
@@ -79,26 +82,22 @@ data class GoalDetailsScreen(val goalId: String) : Screen {
                 modifier = Modifier.padding(top = 16.dp)
             )
             Spacer(modifier = Modifier.height(32.dp))
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                if (state.goalDetails.isNotEmpty())
+
+            if (state.goalDetails != null)
+                LazyColumn(modifier = Modifier
+                    .fillMaxSize()
+                ) {
                     items(
-                        viewModel.state.goalDetails,
-                        key = { item -> item.title }
+                        viewModel.state.goalDetails!!.tasks,
+                        key = { item -> item.percent }
                     ) {
-                        GoalDetailsComponent(goalDetails = it)
+                        GoalDetailsComponent(
+                            taskInfo = it,
+                            goalDetails = state.goalDetails
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
-                else {
-                    item {
-                        Text(
-                            text = "There is no task for today!",
-                            style = MaterialTheme.typography.h3,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
                 }
-            }
         }
     }
 }

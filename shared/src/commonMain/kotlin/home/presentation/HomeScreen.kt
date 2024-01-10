@@ -106,7 +106,7 @@ object HomeScreen : Screen {
                                 modifier = Modifier.size(420.dp).align(Alignment.Center),
                                 goals = viewModel.state.goals,
                                 onGoalClick = {
-                                    navigator.push(GoalDetailsScreen(it.title))
+                                    navigator.push(GoalDetailsScreen(it.id))
                                 }
                             )
                             Text(

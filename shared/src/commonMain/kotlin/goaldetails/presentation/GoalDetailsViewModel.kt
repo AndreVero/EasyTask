@@ -20,12 +20,10 @@ class GoalDetailsViewModel(
     private val _uiEvent = Channel<GoalDetailsUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    init { getTasks() }
-
-    private fun getTasks() {
+    fun getTasks(id: String) {
         state = state.copy(isLoading = true)
         viewModelScope.launch {
-            goalDetailsRepository.getGoalDetails()
+            goalDetailsRepository.getGoalDetails(id)
                 .onSuccess { goalDetails ->
                     Napier.d { "Task success"}
                     state = state.copy(isLoading = false, goalDetails = goalDetails)
