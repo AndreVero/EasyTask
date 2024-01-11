@@ -71,8 +71,6 @@ fun TaskComponent(
                                 expanded = false
                             }
                         )
-                        Spacer(modifier = Modifier.height(24.dp))
-                        StatisticComponent(modifier = Modifier.height(300.dp).width(250.dp))
                     }
                 } else {
                     Text(
