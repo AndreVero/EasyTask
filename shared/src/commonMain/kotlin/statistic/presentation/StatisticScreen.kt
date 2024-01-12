@@ -2,7 +2,9 @@ package statistic.presentation
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -84,7 +87,6 @@ object StatisticScreen: Screen {
                 },
                 modifier = Modifier.padding(top = 16.dp)
             )
-            Spacer(modifier = Modifier.height(32.dp))
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -94,15 +96,7 @@ object StatisticScreen: Screen {
                         viewModel.state.statistics
                     ) {
                         Spacer(modifier = Modifier.height(24.dp))
-                        Canvas(modifier = Modifier.size(24.dp)) {
-                            scale(3f) {
-                                drawPath(it.icon, color = Color.White)
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(24.dp))
-                        StatisticComponent(
-                            points = it.points,
-                            modifier = Modifier.height(300.dp).width(250.dp))
+                        StatisticComponent(statistic = it)
                     }
                 else {
                     item {
