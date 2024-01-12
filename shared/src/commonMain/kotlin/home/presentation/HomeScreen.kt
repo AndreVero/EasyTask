@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
+import statistic.presentation.StatisticScreen
 import tasks.presentation.TasksScreen
 import utils.LocalSnackbarHostState
 
@@ -82,7 +83,9 @@ object HomeScreen : Screen {
                 actions = {
                     IconButton(
                         modifier = Modifier.clip(CircleShape).background(Color.White),
-                        onClick = {}
+                        onClick = {
+                            navigator.push(StatisticScreen)
+                        }
                     ) {
                         Icon(
                             painter = painterResource("icon_chart.xml"),

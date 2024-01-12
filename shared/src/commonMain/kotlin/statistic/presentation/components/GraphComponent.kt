@@ -1,4 +1,4 @@
-package tasks.presentation.components
+package statistic.presentation.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -11,24 +11,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathMeasure
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun StatisticComponent(
-    points: List<Float> = listOf(300f, 290f, 120f, 490f, 230f, 50f, 234f),
+fun GraphComponent(
+    points: List<Int>,
     xAxisValues: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7),
-    yAxisValues: List<Int> = listOf(50, 100, 150, 200, 250, 300, 350, 400, 450, 500),
-    verticalStep: Int = 50,
+    yAxisValues: List<Int> = listOf(10, 20, 30, 40, 50, 60, 70, 80, 90, 100),
+    verticalStep: Int = 10,
     modifier: Modifier = Modifier
 ) {
 

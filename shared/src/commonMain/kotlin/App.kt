@@ -15,13 +15,14 @@ import home.presentation.HomeScreen
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import org.koin.compose.KoinApplication
+import statistic.di.statistic
 import tasks.di.tasksModule
 import utils.LocalSnackbarHostState
 
 @Composable
 fun App() {
     KoinApplication(application = {
-        modules(goalModule() + tasksModule() + goalDetails())
+        modules(goalModule() + tasksModule() + goalDetails() + statistic())
     }) {
         Napier.base(DebugAntilog())
         EasyTaskTheme {
