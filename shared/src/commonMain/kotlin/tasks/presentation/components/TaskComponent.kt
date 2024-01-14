@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -42,12 +43,20 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 import tasks.domain.model.Task
 
+sealed interface TaskState {
+    data object Done: TaskState
+
+    data object Failed: TaskState
+
+    data object Undefined: TaskState
+}
+
 @Composable
 fun TaskComponent(
     task: Task,
     markTaskAsDone: () -> Unit,
     markTaskAsFailed: () -> Unit,
-    distanceForSwipe: Dp = 150.dp,
+    distanceForSwipe: Dp = 50.dp,
     modifier: Modifier = Modifier
 ) {
 
@@ -55,13 +64,12 @@ fun TaskComponent(
     var offset by remember { mutableStateOf(DpOffset.Zero) }
     val coroutineScope = rememberCoroutineScope()
     val animatable by remember { mutableStateOf(Animatable(1f)) }
-    var doneAnimationVisible by remember { mutableStateOf(false) }
-    var failedAnimationVisible by remember { mutableStateOf(false) }
+    var taskState by remember { mutableStateOf<TaskState>(TaskState.Undefined) }
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(500.dp)
+            .height(140.dp)
             .offset(x = offset.x * animatable.value, y = offset.y * animatable.value)
             .border(
                 1.dp, Color.White, RoundedCornerShape(
@@ -76,10 +84,8 @@ fun TaskComponent(
                 detectDragGestures(
                     onDragEnd = {
                         if (offset.x > distanceForSwipe) {
-                            doneAnimationVisible = true
                             markTaskAsDone()
                         } else if (offset.x < -distanceForSwipe) {
-                            failedAnimationVisible = true
                             markTaskAsFailed()
                         } else {
                             coroutineScope.launch {
@@ -89,7 +95,7 @@ fun TaskComponent(
                             }
                         }
                     },
-                    onDrag = { change, dragAmount ->
+                    onDrag = { _, dragAmount ->
                         val x = offset.x.toPx()
                         val y = offset.y.toPx()
 
@@ -97,61 +103,93 @@ fun TaskComponent(
                             x = (x + dragAmount.x).toDp(),
                             y = y.toDp()
                         )
+
+                        taskState = if (offset.x < -distanceForSwipe && taskState != TaskState.Failed) {
+                            TaskState.Failed
+                        } else if (offset.x > distanceForSwipe && taskState != TaskState.Done) {
+                            TaskState.Done
+                        } else if (taskState != TaskState.Undefined && offset.x in -distanceForSwipe..distanceForSwipe) {
+                            TaskState.Undefined
+                        } else {
+                            taskState
+                        }
                     }
                 )
             }
     ) {
-        if (doneAnimationVisible) {
-            JsonAnimation(
-                modifier = Modifier.fillMaxSize(),
-                fileName = resource("raw/anim2.json"),
-                iterations = 10
-            )
-        }
-        if (failedAnimationVisible) {
-            JsonAnimation(
-                modifier = Modifier.fillMaxSize(),
-                fileName = resource("raw/anim2.json"),
-                iterations = 10
-            )
-        }
-        Column(modifier = Modifier.align(Alignment.TopStart)) {
-            Text(
-                text = "Title: " + task.title,
-                color = Color.White,
-                style = MaterialTheme.typography.body2,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Description: " + task.description,
-                color = Color.White,
-                style = MaterialTheme.typography.body2,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            AnimatedContent(expanded) { isExpanded ->
-                if (isExpanded) {
-                    Column {
+        AnimatedContent(
+            targetState = taskState,
+            modifier = Modifier.align(Alignment.CenterStart)
+        ) {
+            when (it) {
+                TaskState.Done -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        JsonAnimation(
+                            modifier = Modifier.fillMaxSize(),
+                            fileName = resource("raw/done_animation.json"),
+                            iterations = 100
+                        )
                         Text(
-                            text = "Motivation: " + task.motivation,
+                            text = "Done",
+                            style = MaterialTheme.typography.h3,
                             color = Color.White,
-                            style = MaterialTheme.typography.body2,
-                            modifier = Modifier.width(330.dp).clickable {
-                                expanded = false
-                            }
+                            modifier = Modifier.align(Alignment.Center)
                         )
                     }
-                } else {
-                    Text(
-                        text = "Tap to see motivation...",
-                        color = Color.White,
-                        style = MaterialTheme.typography.body2,
-                        modifier = Modifier.clickable {
-                            expanded = true
+                }
+                TaskState.Failed -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            text = "Next time...\n(Don't worry!)",
+                            style = MaterialTheme.typography.h3,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+
+                }
+                TaskState.Undefined -> {
+                    Column(modifier = Modifier.align(Alignment.TopStart)) {
+                        Text(
+                            text = "Title: " + task.title,
+                            color = Color.White,
+                            style = MaterialTheme.typography.body2,
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Description: " + task.description,
+                            color = Color.White,
+                            style = MaterialTheme.typography.body2,
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        AnimatedContent(expanded) { isExpanded ->
+                            if (isExpanded) {
+                                Column {
+                                    Text(
+                                        text = "Motivation: " + task.motivation,
+                                        color = Color.White,
+                                        style = MaterialTheme.typography.body2,
+                                        modifier = Modifier.width(330.dp).clickable {
+                                            expanded = false
+                                        }
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    text = "Tap to see motivation...",
+                                    color = Color.White,
+                                    style = MaterialTheme.typography.body2,
+                                    modifier = Modifier.clickable {
+                                        expanded = true
+                                    }
+                                )
+                            }
                         }
-                    )
+
+                    }
                 }
             }
-
         }
         Canvas(modifier = Modifier.size(24.dp).align(Alignment.BottomEnd)) {
             val center = this.center
@@ -165,6 +203,5 @@ fun TaskComponent(
                 }
             }
         }
-
     }
 }
