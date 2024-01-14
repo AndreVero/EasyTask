@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 import tasks.presentation.components.TaskComponent
@@ -85,7 +86,11 @@ object TasksScreen : Screen {
                         viewModel.state.tasks,
                         key = { item -> item.title }
                     ) {
-                        TaskComponent(task = it)
+                        TaskComponent(
+                            task = it,
+                            markTaskAsDone = { Napier.d { "Done" } },
+                            markTaskAsFailed = { Napier.d { "Failed" }}
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 else {
