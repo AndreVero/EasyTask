@@ -52,8 +52,9 @@ fun StatisticComponent(statistic: Statistic) {
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        GraphComponent(
-            points = statistic.points,
-            modifier = Modifier.height(300.dp).width(250.dp))
+        ChartComponent(
+            modifier = Modifier.size(160.dp),
+            statistic = statistic
+        )
     }
 }
