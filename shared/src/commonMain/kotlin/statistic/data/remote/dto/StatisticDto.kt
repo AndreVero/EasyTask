@@ -6,14 +6,14 @@ import statistic.domain.model.Statistic
 
 @Serializable
 data class StatisticDto(
-    val points: List<Int>,
+    val percent_of_completion: Int,
     val icon: String,
     val title: String
 )
 
 fun StatisticDto.toStatistic() : Statistic {
     return Statistic(
-        points = this.points,
+        percentOfCompletion = percent_of_completion,
         title = this.title,
         icon  = PathParser().parsePathString(this.icon)
             .toPath()
