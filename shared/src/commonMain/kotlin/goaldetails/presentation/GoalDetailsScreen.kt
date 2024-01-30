@@ -1,16 +1,18 @@
 package goaldetails.presentation
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -35,8 +37,6 @@ import goaldetails.presentation.components.GoalDetailsComponent
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 import utils.LocalSnackbarHostState
-
-val DEFAULT_HEIGHT = 120.dp
 
 data class GoalDetailsScreen(val goalId: String) : Screen {
     @Composable
@@ -83,12 +83,13 @@ data class GoalDetailsScreen(val goalId: String) : Screen {
             )
             Spacer(modifier = Modifier.height(32.dp))
 
-            if (state.goalDetails != null)
+            state.goalDetails?.let {
                 LazyColumn(modifier = Modifier
                     .fillMaxSize()
+                    .padding(16.dp)
                 ) {
                     items(
-                        viewModel.state.goalDetails!!.tasks,
+                        it.tasks,
                         key = { item -> item.percent }
                     ) {
                         GoalDetailsComponent(
@@ -97,7 +98,27 @@ data class GoalDetailsScreen(val goalId: String) : Screen {
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
+                    if (!it.isActive) {
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(
+                                onClick = { },
+                                shape = RoundedCornerShape(20.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color.White
+                                ),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Activate",
+                                    color = Color.Black,
+                                    style = MaterialTheme.typography.h3,
+                                )
+                            }
+                        }
+                    }
                 }
+            }
         }
     }
 }
