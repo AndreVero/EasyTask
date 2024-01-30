@@ -5,5 +5,5 @@ data class Goal(
     val title: String,
     val description: String,
     val goalPath: GoalPath,
-    val progress: Int,
+    val progress: Int?,
 )

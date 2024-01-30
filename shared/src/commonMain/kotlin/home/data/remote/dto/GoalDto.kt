@@ -11,7 +11,7 @@ data class GoalDto(
     val title: String,
     val description: String,
     val icon: String,
-    val progress: Int
+    val progress: Int?
 )
 
 fun GoalDto.toGoal() : Goal {

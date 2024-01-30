@@ -159,34 +159,35 @@ fun GoalsComponent(
 
             val diameter = innerCircleRadius.toPx() * 2
             val pathBounds = task.goalPath.bounds
-            val progress = task.progress
-            val progressX = currentOffset.x - innerCircleRadius.toPx()
-            val progressY = currentOffset.y - innerCircleRadius.toPx()
+            task.progress?.let { progress ->
+                val progressX = currentOffset.x - innerCircleRadius.toPx()
+                val progressY = currentOffset.y - innerCircleRadius.toPx()
 
-            drawArc(
-                topLeft = Offset(progressX, progressY),
-                color = Color.Gray,
-                startAngle = 0f,
-                sweepAngle = 360f,
-                useCenter = false,
-                size = Size(  diameter * animateFloat.value, diameter * animateFloat.value),
-                style = Stroke(
-                    width = 4.dp.toPx(),
-                    cap = StrokeCap.Round
+                drawArc(
+                    topLeft = Offset(progressX, progressY),
+                    color = Color.Gray,
+                    startAngle = 0f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    size = Size(  diameter * animateFloat.value, diameter * animateFloat.value),
+                    style = Stroke(
+                        width = 4.dp.toPx(),
+                        cap = StrokeCap.Round
+                    )
                 )
-            )
-            drawArc(
-                topLeft = Offset(progressX, progressY),
-                color = Color(0xFF23A145),
-                startAngle = 90f,
-                sweepAngle = 360f * (progress / angleRatio.value),
-                useCenter = false,
-                size = Size(diameter * animateFloat.value, diameter * animateFloat.value),
-                style = Stroke(
-                    width = 4.dp.toPx(),
-                    cap = StrokeCap.Round
+                drawArc(
+                    topLeft = Offset(progressX, progressY),
+                    color = Color(0xFF23A145),
+                    startAngle = 90f,
+                    sweepAngle = 360f * (progress / angleRatio.value),
+                    useCenter = false,
+                    size = Size(diameter * animateFloat.value, diameter * animateFloat.value),
+                    style = Stroke(
+                        width = 4.dp.toPx(),
+                        cap = StrokeCap.Round
+                    )
                 )
-            )
+            }
 
             translate(
                 left = currentOffset.x - pathBounds.right * 1.5f,

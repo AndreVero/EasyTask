@@ -12,7 +12,8 @@ data class GoalDetailsDto(
     val title: String,
     val description: String,
     val icon: String,
-    val tasks: List<Map<String, String>>
+    val tasks: List<Map<String, String>>,
+    val isActive: Boolean,
 )
 
 fun GoalDetailsDto.toGoalDetails() : GoalDetails {
@@ -24,6 +25,7 @@ fun GoalDetailsDto.toGoalDetails() : GoalDetails {
         tasks = this.tasks.map { TaskInfo(
             title = it["title"] ?: "",
             percent = it["percent"] ?: ""
-        ) }
+        ) },
+        isActive = isActive
     )
 }
