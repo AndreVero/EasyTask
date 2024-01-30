@@ -35,20 +35,18 @@ import statistic.domain.model.Statistic
 
 @Composable
 fun ChartComponent(
-    modifier: Modifier = Modifier,
     statistic: Statistic,
     strokeWidth: Dp = 10.dp,
-    color: Color = Color.White
+    color: Color = Color.White,
+    content : @Composable (modifier: Modifier) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val angleRatio = remember {
         Animatable(0f)
     }
 
     var showValue by remember { mutableStateOf(false) }
-    val text: Int by animateIntAsState(
-        targetValue = if (showValue) statistic.percentOfCompletion else 0,
-        animationSpec = tween(durationMillis = 1500)
-    )
+
 
     LaunchedEffect(key1 = statistic.percentOfCompletion) {
         showValue = true
@@ -60,7 +58,7 @@ fun ChartComponent(
         )
     }
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
         Box {
@@ -90,12 +88,7 @@ fun ChartComponent(
                     )
                 )
             }
-            Text(
-                text = "$text%",
-                color = Color.White,
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.align(Alignment.Center)
-            )
+            content(Modifier.align(Alignment.Center))
         }
     }
 }

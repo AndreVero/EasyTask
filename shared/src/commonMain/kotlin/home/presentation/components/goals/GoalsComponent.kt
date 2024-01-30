@@ -3,6 +3,7 @@ package home.presentation.components.goals
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -16,7 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
@@ -56,6 +61,19 @@ fun GoalsComponent(
     var angel by remember { mutableStateOf(0f) }
     var dragStartedAngle by remember { mutableStateOf(0f) }
     var oldAngle by remember { mutableStateOf(angel) }
+
+    val angleRatio = remember {
+        Animatable(0f)
+    }
+
+    LaunchedEffect(key1 = goals) {
+        angleRatio.animateTo(
+            targetValue = 100f,
+            animationSpec = tween(
+                durationMillis = 1500
+            )
+        )
+    }
 
     LaunchedEffect(animateFloat) {
         animateFloatText.animateTo(
@@ -138,7 +156,38 @@ fun GoalsComponent(
                 radius = innerCircleRadius.toPx() * animateFloat.value,
                 center = currentOffset
             )
+
+            val diameter = innerCircleRadius.toPx() * 2
             val pathBounds = task.goalPath.bounds
+            val progress = task.progress
+            val progressX = currentOffset.x - innerCircleRadius.toPx()
+            val progressY = currentOffset.y - innerCircleRadius.toPx()
+
+            drawArc(
+                topLeft = Offset(progressX, progressY),
+                color = Color.Gray,
+                startAngle = 0f,
+                sweepAngle = 360f,
+                useCenter = false,
+                size = Size(  diameter * animateFloat.value, diameter * animateFloat.value),
+                style = Stroke(
+                    width = 4.dp.toPx(),
+                    cap = StrokeCap.Round
+                )
+            )
+            drawArc(
+                topLeft = Offset(progressX, progressY),
+                color = Color(0xFF23A145),
+                startAngle = 90f,
+                sweepAngle = 360f * (progress / angleRatio.value),
+                useCenter = false,
+                size = Size(diameter * animateFloat.value, diameter * animateFloat.value),
+                style = Stroke(
+                    width = 4.dp.toPx(),
+                    cap = StrokeCap.Round
+                )
+            )
+
             translate(
                 left = currentOffset.x - pathBounds.right * 1.5f,
                 top = currentOffset.y - 15.dp.toPx() - pathBounds.bottom  * 1.5f

@@ -1,7 +1,5 @@
 package goaldetails.presentation
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,8 +33,6 @@ import goaldetails.presentation.components.GoalDetailsComponent
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 import utils.LocalSnackbarHostState
-
-val DEFAULT_HEIGHT = 120.dp
 
 data class GoalDetailsScreen(val goalId: String) : Screen {
     @Composable
