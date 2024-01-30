@@ -1,6 +1,5 @@
 package goaldetails.presentation
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -87,6 +86,7 @@ data class GoalDetailsScreen(val goalId: String) : Screen {
             state.goalDetails?.let {
                 LazyColumn(modifier = Modifier
                     .fillMaxSize()
+                    .padding(16.dp)
                 ) {
                     items(
                         it.tasks,
