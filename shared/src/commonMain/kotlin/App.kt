@@ -22,33 +22,28 @@ import utils.LocalSnackbarHostState
 
 @Composable
 fun App() {
-    KoinApplication(application = {
-        modules(goalModule() + tasksModule() + goalDetails() + statistic() + platformModule)
-    }) {
-        Napier.base(DebugAntilog())
-        EasyTaskTheme {
-            val localSnackbarHostState = LocalSnackbarHostState.current
-            CompositionLocalProvider(
-                LocalSnackbarHostState provides localSnackbarHostState
-            ) {
-                Scaffold(
-                    snackbarHost = {
-                        SnackbarHost(hostState = LocalSnackbarHostState.current) { data ->
-                            val backgroundColor = MaterialTheme.colors.error
-                            Snackbar(
-                                snackbarData = data,
-                                backgroundColor = backgroundColor,
-                            )
-                        }
+    Napier.base(DebugAntilog())
+    EasyTaskTheme {
+        val localSnackbarHostState = LocalSnackbarHostState.current
+        CompositionLocalProvider(
+            LocalSnackbarHostState provides localSnackbarHostState
+        ) {
+            Scaffold(
+                snackbarHost = {
+                    SnackbarHost(hostState = LocalSnackbarHostState.current) { data ->
+                        val backgroundColor = MaterialTheme.colors.error
+                        Snackbar(
+                            snackbarData = data,
+                            backgroundColor = backgroundColor,
+                        )
                     }
-                ) {
-                    Navigator(HomeScreen) { SlideTransition(it) }
                 }
+            ) {
+                Navigator(HomeScreen) { SlideTransition(it) }
             }
         }
     }
 }
-
 
 
 expect fun getPlatformName(): String

@@ -7,15 +7,15 @@ import android.os.Vibrator
 
 
 class AndroidVibrationHandler(private val context: Context) : VibrationHandler {
-    override fun vibrate() {
 
+    override fun vibrate() {
         val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v!!.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+            v?.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
-            //deprecated in API 26
-            v!!.vibrate(500)
+            v?.vibrate(500)
         }
     }
+
 }

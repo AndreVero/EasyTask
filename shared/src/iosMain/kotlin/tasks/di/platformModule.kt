@@ -5,7 +5,7 @@ import org.koin.dsl.module
 import utils.IosVibrationHandler
 import utils.VibrationHandler
 
-internal actual val platformModule: Module
+actual val platformModule: Module
     get() = module {
         single<VibrationHandler> { IosVibrationHandler() }
     }

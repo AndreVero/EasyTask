@@ -14,4 +14,4 @@ fun tasksModule() = module {
 
 }
 
-internal expect val platformModule: Module
+expect val platformModule: Module

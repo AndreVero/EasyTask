@@ -12,6 +12,8 @@ kotlin {
             dependencies {
                 implementation(project.dependencies.platform("com.google.firebase:firebase-bom:32.7.0"))
                 implementation(project(":shared"))
+                implementation("io.insert-koin:koin-android:3.5.3")
+                implementation("io.insert-koin:koin-androidx-compose:3.5.3")
             }
         }
     }
