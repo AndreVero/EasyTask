@@ -14,3 +14,4 @@ actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle)
 }
 
 @Composable fun MainView() = App()
+

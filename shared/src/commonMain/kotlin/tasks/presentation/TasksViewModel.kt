@@ -9,9 +9,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import tasks.domain.repository.TasksRepository
+import utils.VibrationHandler
 
 class TasksViewModel(
-    private val tasksRepository: TasksRepository
+    private val tasksRepository: TasksRepository,
+    private val vibrationHandler: VibrationHandler
 ) : ViewModel() {
 
     var state by mutableStateOf(TasksScreenState())
@@ -28,6 +30,7 @@ class TasksViewModel(
             tasksRepository.getTodayTasks()
                 .onSuccess { tasks ->
                     Napier.d { "Task success"}
+                    vibrationHandler.vibrate()
                     state = state.copy(isLoading = false, tasks = tasks)
                 }
                 .onFailure {
